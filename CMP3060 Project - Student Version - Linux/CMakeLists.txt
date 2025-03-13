@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.0)   # Selects the minimum version of CMake r
 project(GFX-LAB VERSION 0.1.0)          # Here we select the project name and version
 
 find_package(OpenGL REQUIRED)
-find_package(GLEW REQUIRED)
+# find_package(GLEW REQUIRED)
 
 # Here we select C++17 with all the standards required and all compiler-specific extensions disabled
 set(CMAKE_CXX_STANDARD 17)
@@ -18,7 +18,16 @@ set(GLFW_USE_HYBRID_HPG ON CACHE BOOL "" FORCE)     # Add variables to use High 
 add_subdirectory(vendor/glfw)                       # Build the GLFW project to use later as a library
 
 # A variable with all the source files of GLAD
-set(GLAD_SOURCE vendor/glad/src/gl.c)
+# set(GLAD_SOURCE vendor/glad/src/gl.c)
+# Detect the OS and set GLAD source accordingly
+if(WIN32)
+    set(GLAD_SOURCE vendor/glad-windows/src/gl.c)
+elseif(UNIX AND NOT APPLE)
+    message(STATUS "Detected Linux")
+    set(GLAD_SOURCE vendor/glad/src/gl.c)
+else()
+    message(WARNING "Unsupported OS")
+endif()
 # A variables with all the source files of Dear ImGui
 set(IMGUI_SOURCES
         vendor/imgui/imgui.cpp
@@ -92,12 +101,18 @@ set(COMMON_SOURCES
 include_directories(
         source/common
         vendor/glfw/include
-        vendor/glad/include
+        # vendor/glad/include
         vendor/glm
         vendor/imgui
         vendor/utils
 )
-
+if(WIN32)
+    include_directories(vendor/glad-windows/include)
+elseif(UNIX AND NOT APPLE)
+    include_directories(vendor/glad/include)
+else()
+    message(WARNING "Unsupported OS")
+endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${PROJECT_SOURCE_DIR}/bin)
@@ -123,4 +138,4 @@ set(STATES_SOURCES
 add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
 target_link_libraries(GAME_APPLICATION glfw)
 target_link_libraries(GAME_APPLICATION OpenGL::GL)
-target_link_libraries(GAME_APPLICATION GLEW::GLEW)
+# target_link_libraries(GAME_APPLICATION GLEW::GLEW)
