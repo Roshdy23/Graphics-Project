@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.0)   # Selects the minimum version of CMake r
 project(GFX-LAB VERSION 0.1.0)          # Here we select the project name and version
 
 find_package(OpenGL REQUIRED)
-# find_package(GLEW REQUIRED)
+find_package(GLEW REQUIRED)
 
 # Here we select C++17 with all the standards required and all compiler-specific extensions disabled
 set(CMAKE_CXX_STANDARD 17)
@@ -18,7 +18,7 @@ set(GLFW_USE_HYBRID_HPG ON CACHE BOOL "" FORCE)     # Add variables to use High 
 add_subdirectory(vendor/glfw)                       # Build the GLFW project to use later as a library
 
 # A variable with all the source files of GLAD
-# set(GLAD_SOURCE vendor/glad/src/gl.c)
+set(GLAD_SOURCE vendor/glad/src/gl.c)
 # Detect the OS and set GLAD source accordingly
 if(WIN32)
     set(GLAD_SOURCE vendor/glad-windows/src/gl.c)
@@ -138,4 +138,4 @@ set(STATES_SOURCES
 add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
 target_link_libraries(GAME_APPLICATION glfw)
 target_link_libraries(GAME_APPLICATION OpenGL::GL)
-# target_link_libraries(GAME_APPLICATION GLEW::GLEW)
+target_link_libraries(GAME_APPLICATION GLEW::GLEW)
