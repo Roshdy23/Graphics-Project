@@ -12,5 +12,16 @@ uniform int size = 32;
 uniform vec3 colors[2];
 
 void main(){
-    frag_color = vec4(colors[0], 1.0);
+    ivec2 pixel_pos = ivec2(gl_FragCoord.xy);
+
+    // Determine which tile this pixel belongs to
+    int tile_x = (pixel_pos.x / size) % 2;
+    int tile_y = (pixel_pos.y / size) % 2;
+
+    // Determine which color to use (checkerboard pattern)
+    int color_index = (tile_x + tile_y) % 2;
+
+    // Set the fragment color
+    frag_color = vec4(colors[color_index], 1.0);
+    // frag_color = vec4(colors[0], 1.0);
 }

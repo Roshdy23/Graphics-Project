@@ -19,7 +19,15 @@ out vec4 frag_color;
 // (which is defined in the "dot" function).
 
 //TODO: (Req 1) Finish this shader and apply the channel mixing using the "dot" function.
-
+uniform vec4 red = vec4(1.0, 0.0, 0.0, 0.0);
+uniform vec4 green = vec4(0.0, 1.0, 0.0, 0.0);
+uniform vec4 blue = vec4(0.0, 0.0, 1.0, 0.0);
 void main(){
-    frag_color = fs_in.color;
+    // frag_color = fs_in.color;
+    vec4 inputColor = vec4(fs_in.color, 1.0);
+
+    frag_color.r = dot(red, inputColor);
+    frag_color.g = dot(green, inputColor);
+    frag_color.b = dot(blue, inputColor);
+    frag_color.a = 1.0; // Fully opaque
 }
