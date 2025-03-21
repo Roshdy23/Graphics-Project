@@ -23,6 +23,10 @@ namespace our
         ~Texture2D()
         {
             // TODO: (Req 5) Complete this function
+            if (name)
+            {
+                glDeleteTextures(1, &name);
+            }
         }
 
         // Get the internal OpenGL name of the texture which is useful for use with framebuffers
@@ -42,6 +46,7 @@ namespace our
         static void unbind()
         {
             // TODO: (Req 5) Complete this function
+            glBindTexture(GL_TEXTURE_2D, 0);
         }
 
         Texture2D(const Texture2D &) = delete;
