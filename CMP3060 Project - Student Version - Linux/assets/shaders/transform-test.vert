@@ -16,9 +16,10 @@ uniform mat4 transform;
 
 void main() {
     gl_Position = transform * vec4(position, 1.0);
-        vs_out.position = (transform * vec4(position, 1.0)).xyz;
-vs_out.normal = normalize(mat3(transpose(inverse(transform))) * normal);
     
+    // No need to change any of the following lines
+    vs_out.position = position;
     vs_out.color = color;
     vs_out.tex_coord = tex_coord;
+    vs_out.normal = normal;
 }
