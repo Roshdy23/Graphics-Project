@@ -9,12 +9,15 @@ namespace our {
     // Remember that the order of transformations is: Scaling, Rotation then Translation
     // HINT: to convert euler angles to a rotation matrix, you can use glm::yawPitchRoll
     glm::mat4 Transform::toMat4() const {
-        glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), scale);
-        glm::mat4 rotationMatrix = glm::yawPitchRoll(rotation.y, rotation.x, rotation.z);
-        glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position);
+        glm::mat4 translationMat = glm::translate(glm::mat4(1.0f), position);
+
+        glm::mat4 rotationMat = glm::mat4_cast(glm::quat(glm::radians(rotation)));
+    
+        glm::mat4 scaleMat = glm::scale(glm::mat4(1.0f), scale);
         
-        return translationMatrix * rotationMatrix * scaleMatrix;
+        return translationMat * rotationMat * scaleMat;
     }
+    
 
      // Deserializes the entity data and components from a json object
     void Transform::deserialize(const nlohmann::json& data){
