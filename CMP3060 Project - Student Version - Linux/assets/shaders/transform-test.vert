@@ -15,11 +15,12 @@ out Varyings {
 uniform mat4 transform;
 
 void main(){
-    //TODO: (Req 3) Change the next line to apply the transformation matrix
+    // (Req 3) Apply the transformation matrix to the position
+    gl_Position = transform * vec4(position, 1.0);
     
     // No need to change any of the following lines
-    vs_out.position = position;
+    vs_out.position = (transform * vec4(position, 1.0)).xyz;
     vs_out.color = color;
     vs_out.tex_coord = tex_coord;
-    vs_out.normal = normal;
+    vs_out.normal = mat3(transform) * normal; // Apply rotation part of the transform to the normal
 }
