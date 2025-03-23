@@ -49,10 +49,21 @@ namespace our {
         // Then we check if there is a postprocessing shader in the configuration
         if(config.contains("postprocess")){
             //TODO: (Req 11) Create a framebuffer
+            GLuint fbo;
+            glGenFramebuffers(1, &fbo);
+
 
             //TODO: (Req 11) Create a color and a depth texture and attach them to the framebuffer
+
             // Hints: The color format can be (Red, Green, Blue and Alpha components with 8 bits for each channel).
             // The depth format can be (Depth component with 24 bits).
+            GLuint colorTexture;
+            glGenTextures(1, &colorTexture);
+            glBindTexture(GL_TEXTURE_2D, colorTexture);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0);
             
             //TODO: (Req 11) Unbind the framebuffer just to be safe
 
