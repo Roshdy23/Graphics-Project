@@ -14,7 +14,7 @@ namespace our {
         // This constructor creates an OpenGL sampler and saves its object name in the member variable "name" 
         Sampler() {
             //TODO: (Req 6) Complete this function
-            glGenSamplers(1, &name); ; 
+            glGenSamplers(1, &name);  
         };
 
         // This deconstructor deletes the underlying OpenGL sampler
