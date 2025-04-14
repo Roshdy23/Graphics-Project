@@ -1,5 +1,4 @@
 #pragma once
-
 #include <glad/gl.h>
 #include <glm/vec4.hpp>
 #include <json/json.hpp>
@@ -12,20 +11,20 @@ namespace our {
     struct PipelineState {
         // This set of pipeline options specifies whether face culling will be used or not and how it will be configured
         struct {
-            bool enabled = false;
+            bool enabled = true;
             GLenum culledFace = GL_BACK;
             GLenum frontFace = GL_CCW;
         } faceCulling;
 
         // This set of pipeline options specifies whether depth testing will be used or not and how it will be configured
         struct {
-            bool enabled = false;
+            bool enabled = true;
             GLenum function = GL_LEQUAL;
         } depthTesting;
 
         // This set of pipeline options specifies whether blending will be used or not and how it will be configured
         struct {
-            bool enabled = false;
+            bool enabled = true;
             GLenum equation = GL_FUNC_ADD;
             GLenum sourceFactor = GL_SRC_ALPHA;
             GLenum destinationFactor = GL_ONE_MINUS_SRC_ALPHA;
@@ -42,6 +41,38 @@ namespace our {
         // For example, if faceCulling.enabled is true, you should call glEnable(GL_CULL_FACE), otherwise, you should call glDisable(GL_CULL_FACE)
         void setup() const {
             //TODO: (Req 4) Write this function
+            if (faceCulling.enabled) {
+                glEnable(GL_CULL_FACE);
+                glCullFace(faceCulling.culledFace);
+                glFrontFace(faceCulling.frontFace);
+            } else {
+                glDisable(GL_CULL_FACE);
+            }
+        
+            // Depth Testing
+            if (depthTesting.enabled) {
+                glEnable(GL_DEPTH_TEST);
+                glDepthFunc(depthTesting.function);
+            } else {
+                glDisable(GL_DEPTH_TEST);
+            }
+        
+            // Blending
+            if (blending.enabled) {
+                glEnable(GL_BLEND);
+                glBlendEquation(blending.equation);
+                glBlendFunc(blending.sourceFactor, blending.destinationFactor);
+                glBlendColor(blending.constantColor.r,
+                             blending.constantColor.g,
+                             blending.constantColor.b,
+                             blending.constantColor.a);
+            } else {
+                glDisable(GL_BLEND);
+            }
+        
+            // Color & Depth Mask
+            glColorMask(colorMask.r, colorMask.g, colorMask.b, colorMask.a);
+            glDepthMask(depthMask);
         }
 
         // Given a json object, this function deserializes a PipelineState structure
