@@ -11,20 +11,20 @@ namespace our {
     struct PipelineState {
         // This set of pipeline options specifies whether face culling will be used or not and how it will be configured
         struct {
-            bool enabled = true;
+            bool enabled = false;
             GLenum culledFace = GL_BACK;
             GLenum frontFace = GL_CCW;
         } faceCulling;
 
         // This set of pipeline options specifies whether depth testing will be used or not and how it will be configured
         struct {
-            bool enabled = true;
+            bool enabled = false;
             GLenum function = GL_LEQUAL;
         } depthTesting;
 
         // This set of pipeline options specifies whether blending will be used or not and how it will be configured
         struct {
-            bool enabled = true;
+            bool enabled = false;
             GLenum equation = GL_FUNC_ADD;
             GLenum sourceFactor = GL_SRC_ALPHA;
             GLenum destinationFactor = GL_ONE_MINUS_SRC_ALPHA;
