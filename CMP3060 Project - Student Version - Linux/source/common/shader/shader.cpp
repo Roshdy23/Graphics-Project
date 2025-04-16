@@ -43,11 +43,11 @@ bool our::ShaderProgram::attach(const std::string &filename, GLenum type) const
         return false;
     }
 
-    std::cout << "Shader object created.\n";
+    // std::cout << "Shader object created.\n";
     glShaderSource(shader, 1, &sourceCStr, nullptr);
     glCompileShader(shader);
     // Check for compilation errors
-    std::cout << "Shader compiled.\n";
+    // std::cout << "Shader compiled.\n";
     std::string errorLog = checkForShaderCompilationErrors(shader);
     if (!errorLog.empty())
     {
@@ -56,14 +56,14 @@ bool our::ShaderProgram::attach(const std::string &filename, GLenum type) const
         glDeleteShader(shader);
         return false;
     }
-    std::cout << "Shader compiled successfully.\n";
+    // std::cout << "Shader compiled successfully.\n";
     // Attach the shader to the program
     glAttachShader(program, shader);
-    std::cout << "Shader attached to program.\n";
+    // std::cout << "Shader attached to program.\n";
     
     // Shader object is no longer needed after attaching
     glDeleteShader(shader);
-    std::cout << "Shader object deleted.\n";
+    // std::cout << "Shader object deleted.\n";
 
     return true;
 }

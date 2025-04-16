@@ -21,12 +21,12 @@ namespace our {
         ShaderProgram(){
             //TODO: (Req 1) Create A shader program
             program = glCreateProgram();
-            std::cout << "Shader Program Created: " << program << std::endl;
+            // std::cout << "Shader Program Created: " << program << std::endl;
         }
         ~ShaderProgram(){
             //TODO: (Req 1) Delete a shader program
             glDeleteProgram(program);
-            std::cout << "Shader Program Deleted: " << program << std::endl;
+            // std::cout << "Shader Program Deleted: " << program << std::endl;
         }
 
         bool attach(const std::string &filename, GLenum type) const;
