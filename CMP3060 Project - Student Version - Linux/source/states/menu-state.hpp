@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include <application.hpp>
 #include <shader/shader.hpp>
 #include <texture/texture2d.hpp>
@@ -56,7 +57,7 @@ class Menustate: public our::State {
         menuMaterial->shader->attach("assets/shaders/textured.frag", GL_FRAGMENT_SHADER);
         menuMaterial->shader->link();
         // Then we load the menu texture
-        menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu.png");
+        menuMaterial->texture = our::texture_utils::loadImage("assets/textures/twilght.png");
         // Initially, the menu material will be black, then it will fade in
         menuMaterial->tint = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -75,7 +76,7 @@ class Menustate: public our::State {
         highlightMaterial->pipelineState.blending.equation = GL_FUNC_SUBTRACT;
         highlightMaterial->pipelineState.blending.sourceFactor = GL_ONE;
         highlightMaterial->pipelineState.blending.destinationFactor = GL_ONE;
-
+        // highlightMaterial->tint = glm::vec4(1.0f, 1.0f, 1.0f, 0.3f); // 30% transparency
         // Then we create a rectangle whose top-left corner is at the origin and its size is 1x1.
         // Note that the texture coordinates at the origin is (0.0, 1.0) since we will use the 
         // projection matrix to make the origin at the the top-left corner of the screen.

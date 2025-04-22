@@ -1,0 +1,42 @@
+# Blender 4.4.1 MTL File: 'uploads_files_2931636_Cape.blend'
+# www.blender.org
+
+newmtl Eye_brown.001
+Ns 159.999985
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl old_caucasian_male.001
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd G:/CMP3rd/second term/Graphics/Project/Project repo/Graphics-Project/CMP3060 Project - Student Version - Linux/assets/textures/Zombie.png
+map_Ke G:/CMP3rd/second term/Graphics/Project/Project repo/Graphics-Project/CMP3060 Project - Student Version - Linux/assets/textures/Zombie.png
+
+newmtl teethMaterial.001
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.078125 0.078125 0.078125
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd G:/CMP3rd/second term/Graphics/Project/Project repo/Graphics-Project/CMP3060 Project - Student Version - Linux/assets/textures/Zombie.png
+
+newmtl tongue01Material.001
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.078125 0.078125 0.078125
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd G:/CMP3rd/second term/Graphics/Project/Project repo/Graphics-Project/CMP3060 Project - Student Version - Linux/assets/textures/Zombie.png
