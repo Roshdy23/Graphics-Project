@@ -1,6 +1,6 @@
 # Blender 4.4.1
 # www.blender.org
-mtllib Key.mtl
+# mtllib Key.mtl
 o Object_2
 v 0.000194 -0.793866 0.460525
 v 0.000195 -0.793865 0.558717
@@ -12661,7 +12661,7 @@ vt 0.176712 0.262281
 vt 0.888584 0.847726
 vt 0.010000 0.176137
 s 1
-usemtl Default
+# usemtl Default
 f 1/1/1 2/2/2 3/3/3
 f 4/4/4 5/5/5 6/6/6
 f 7/7/7 8/8/8 9/9/4

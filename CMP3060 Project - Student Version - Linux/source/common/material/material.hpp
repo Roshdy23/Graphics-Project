@@ -53,6 +53,8 @@ namespace our {
         void deserialize(const nlohmann::json& data) override;
     };
 
+    // todo litmaterial
+
     // This function returns a new material instance based on the given type
     inline Material* createMaterialFromType(const std::string& type){
         if(type == "tinted"){

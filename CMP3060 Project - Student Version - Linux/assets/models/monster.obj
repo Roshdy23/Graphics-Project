@@ -1,6 +1,6 @@
 # Blender 4.4.1
 # www.blender.org
-mtllib monster.mtl
+# mtllib monster.mtl
 o siam1
 v 0.275913 2.523578 0.139525
 v 0.276471 2.525671 0.162535
@@ -62006,7 +62006,7 @@ vt 0.444614 0.937239
 vt 0.448078 0.936488
 vt 0.448078 0.977236
 s 1
-usemtl None
+# usemtl None
 f 1/1/1 2/2/2 3/3/3
 f 3/3/3 4/4/4 1/1/1
 f 1/1/1 5/5/5 6/6/6

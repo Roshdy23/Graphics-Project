@@ -6,6 +6,8 @@
 #include <systems/forward-renderer.hpp>
 #include <systems/free-camera-controller.hpp>
 #include <systems/movement.hpp>
+#include <systems/collision.hpp>
+#include <systems/player-controller.hpp>
 #include <asset-loader.hpp>
 
 // This state shows how to use the ECS framework and deserialization.
@@ -15,6 +17,8 @@ class Playstate: public our::State {
     our::ForwardRenderer renderer;
     our::FreeCameraControllerSystem cameraController;
     our::MovementSystem movementSystem;
+    our::CollisionSystem collisionSystem; 
+    our::PlayerControllerSystem playerControllerSystem; 
 
     void onInitialize() override {
         // First of all, we get the scene configuration from the app config
@@ -27,6 +31,18 @@ class Playstate: public our::State {
         if(config.contains("world")){
             world.deserialize(config["world"]);
         }
+        /////////////////////////////////////
+        for(auto entity : world.getEntities()){
+            if(entity->name == "player"){
+                playerControllerSystem.setPlayer(entity);
+                collisionSystem.setPlayer(entity); // ✅ Optional
+                break;
+            }
+        }
+
+        // Provide app pointer to systems that need it
+        playerControllerSystem.setApplication(getApp());
+///////////////////////////////////////////////////////////////////
         // We initialize the camera controller system since it needs a pointer to the app
         cameraController.enter(getApp());
         // Then we initialize the renderer
@@ -38,6 +54,15 @@ class Playstate: public our::State {
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);
+        playerControllerSystem.update( (float)deltaTime); // ✅ NEW
+        // int collisionResult = collisionSystem.update(&world); // ✅ Optional
+        // if (collisionResult == 1) {
+        //     // Game won
+        //     getApp()->changeState("win");
+        // } else if (collisionResult == -1) {
+        //     // Game lost
+        //     getApp()->changeState("lose");
+        // }
         // And finally we use the renderer system to draw the scene
         renderer.render(&world);
 

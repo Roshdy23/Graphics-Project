@@ -5,6 +5,12 @@
 #include "mesh-renderer.hpp"
 #include "free-camera-controller.hpp"
 #include "movement.hpp"
+///
+#include "health-controller.hpp"
+#include "key-collected.hpp"
+#include "key.hpp"
+#include "player-controller.hpp"
+#include "collision.hpp"
 
 namespace our
 {
@@ -31,6 +37,26 @@ namespace our
         else if (type == MeshRendererComponent::getID())
         { // Add MeshRendererComponent here
             component = entity->addComponent<MeshRendererComponent>();
+        }
+        else if (type == HealthComponent::getID())  // For Health System
+        {
+            component = entity->addComponent<HealthComponent>();
+        }
+        else if (type == PlayerInventoryComponent::getID())  // For collecting items
+        {
+            component = entity->addComponent<PlayerInventoryComponent>();
+        }
+        else if (type == KeyComponent::getID())  // For Enemy AI
+        {
+            component = entity->addComponent<KeyComponent>();
+        }
+        else if (type == PlayerControllerComponent::getID())  // For puzzles and challenges
+        {
+            component = entity->addComponent<PlayerControllerComponent>();
+        }
+        else if (type == CollisionComponent::getID())  // For puzzles and challenges
+        {
+            component = entity->addComponent<CollisionComponent>();
         }
 
         if (component)
