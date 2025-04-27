@@ -11,6 +11,7 @@
 #include "key.hpp"
 #include "player-controller.hpp"
 #include "collision.hpp"
+#include "repeated-controller.hpp"
 
 namespace our
 {
@@ -57,6 +58,10 @@ namespace our
         else if (type == CollisionComponent::getID())  // For puzzles and challenges
         {
             component = entity->addComponent<CollisionComponent>();
+        }
+        else if (type == RepeatControllerComponent::getID())  // For puzzles and challenges
+        {
+            component = entity->addComponent<RepeatControllerComponent>();
         }
 
         if (component)

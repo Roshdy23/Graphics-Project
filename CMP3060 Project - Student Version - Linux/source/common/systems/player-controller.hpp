@@ -2,71 +2,157 @@
 
 #include "../ecs/world.hpp"
 #include "../components/player-controller.hpp"
-#include "../components/movement.hpp"
 #include "../application.hpp"
+
 #include <glm/glm.hpp>
+#include <glm/gtc/constants.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace our {
+#include <iostream>
 
-class PlayerControllerSystem {
-    Application* app;
-    Entity* player;
+namespace our
+{
 
-public:
-    void setPlayer(Entity* playerEntity) {
-        this->player = playerEntity;
-    }
+    class PlayerControllerSystem
+    {
+        Application *app;
+        Entity *playerEntity;
+        Entity *cameraEntity;
 
-    void setApplication(Application* application) {
-        this->app = application;
-    }
+        PlayerControllerComponent *controller;
 
-    void update(float deltaTime) {
-        if (!player) return;
+        bool mouse_locked = false;
 
-        auto controller = player->getComponent<PlayerControllerComponent>();
-        if (!controller) return;
+        bool isRightKeyPressed = false;
+        bool isLeftKeyPressed = false;
+        bool isHovering = false;
+        bool isPhasing = false;
+        float phaseTimer = 0.0f;
+        float maxPhaseDuration = 2.0f; // seconds
+        glm::vec3 targetLanePosition;
 
-        glm::vec3 direction = {0, 0, 0};
-
-        // Handle input
-        if (app->getKeyboard().isPressed(GLFW_KEY_W)) direction.z -= 1;
-        if (app->getKeyboard().isPressed(GLFW_KEY_S)) direction.z += 1;
-        if (app->getKeyboard().isPressed(GLFW_KEY_A)) direction.x -= 1;
-        if (app->getKeyboard().isPressed(GLFW_KEY_D)) direction.x += 1;
-
-        // Normalize direction vector
-        if (glm::length(direction) > 0.0f) direction = glm::normalize(direction);
-
-        // Apply running multiplier
-        float speed = controller->moveSpeed;
-        if (app->getKeyboard().isPressed(GLFW_KEY_LEFT_SHIFT))
-            speed *= controller->runMultiplier;
-
-        // Apply horizontal movement
-        controller->velocity.x = direction.x * speed;
-        controller->velocity.z = direction.z * speed;
-
-        // Gravity
-        controller->velocity.y -= controller->gravity * deltaTime;
-
-        // Jumping
-        if (app->getKeyboard().justPressed(GLFW_KEY_SPACE) && controller->canJump) {
-            controller->velocity.y = controller->jumpForce;
-            controller->canJump = false;
+    public:
+        void enter(Application *app)
+        {
+            this->app = app;
         }
 
-        // Update player position
-        player->localTransform.position += controller->velocity * deltaTime;
-
-        // Simple ground check (y=0 is ground)
-        if (player->localTransform.position.y <= 0.0f) {
-            player->localTransform.position.y = 0.0f;
-            controller->velocity.y = 0.0f;
-            controller->canJump = true;
+        void setPlayer(Entity *player)
+        {
+            this->playerEntity = player;
+            this->controller = playerEntity->getComponent<PlayerControllerComponent>();
+            targetLanePosition = playerEntity->localTransform.position;
         }
-    }
-};
+
+        void setCamera(Entity *camera)
+        {
+            this->cameraEntity = camera;
+        }
+
+        void update(World *world, float deltaTime)
+        {
+            if (!playerEntity) return;
+
+            controller = playerEntity->getComponent<PlayerControllerComponent>();
+            glm::vec3 &position = playerEntity->localTransform.position;
+
+            // Matrix for direction vectors
+            glm::mat4 matrix = playerEntity->localTransform.toMat4();
+            glm::vec3 front = glm::vec3(matrix * glm::vec4(0, 0, -1, 0));
+            glm::vec3 right = glm::vec3(matrix * glm::vec4(1, 0, 0, 0));
+
+            // --- Auto Forward Movement (Twilight Drift)
+            float driftSpeed = controller->moveSpeed;
+            position -= front * (driftSpeed * deltaTime);
+
+            // --- Smooth Lane Switching (Floating)
+            if (app->getKeyboard().isPressed(GLFW_KEY_RIGHT))
+            {
+                if (!isRightKeyPressed)
+                {
+                    targetLanePosition.x -= 2.0f; // Move right
+                    targetLanePosition.x = glm::clamp(targetLanePosition.x, -2.0f, 2.0f);
+                    isRightKeyPressed = true;
+                }
+            }
+            else isRightKeyPressed = false;
+
+            if (app->getKeyboard().isPressed(GLFW_KEY_LEFT))
+            {
+                if (!isLeftKeyPressed)
+                {
+                    targetLanePosition.x += 2.0f; // Move left
+                    targetLanePosition.x = glm::clamp(targetLanePosition.x, -2.0f, 2.0f);
+                    isLeftKeyPressed = true;
+                }
+            }
+            else isLeftKeyPressed = false;
+
+            // Smoothly glide toward target lane position
+            position.x = glm::mix(position.x, targetLanePosition.x, 5.0f * deltaTime);
+
+            // --- Hover Mechanism (Gentle Jump Up)
+            if (app->getKeyboard().isPressed(GLFW_KEY_UP))
+            {
+                if (!isHovering && controller->canJump)
+                {
+                    controller->velocity.y = controller->jumpForce;
+                    isHovering = true;
+                    controller->canJump = false;
+                }
+            }
+
+            if (isHovering)
+            {
+                position.y += controller->velocity.y * deltaTime;
+                controller->velocity.y -= controller->gravity * deltaTime;
+
+                if (position.y <= 1.0f)
+                {
+                    position.y = 1.0f;
+                    isHovering = false;
+                    controller->velocity.y = 0.0f;
+                    controller->canJump = true;
+                }
+            }
+
+            // --- Phase (Slide through obstacles)
+            if (app->getKeyboard().justPressed(GLFW_KEY_DOWN))
+            {
+                if (!isPhasing)
+                {
+                    isPhasing = true;
+                    phaseTimer = 0.0f;
+                    // Here you can also enable ghost visual if you want
+                }
+            }
+
+            if (isPhasing)
+            {
+                phaseTimer += deltaTime;
+                if (phaseTimer >= maxPhaseDuration)
+                {
+                    isPhasing = false;
+                    // Disable ghost visual here if needed
+                }
+            }
+
+            // --- Update Camera
+            if (cameraEntity)
+            {
+                cameraEntity->localTransform.position.x = position.x;
+                cameraEntity->localTransform.position.z = position.z + 5.0f; // camera stays slightly behind
+            }
+        }
+
+        void exit()
+        {
+            if (mouse_locked)
+            {
+                mouse_locked = false;
+                app->getMouse().unlockMouse(app->getWindow());
+            }
+        }
+    };
 
 }

@@ -8,6 +8,7 @@
 #include <systems/movement.hpp>
 #include <systems/collision.hpp>
 #include <systems/player-controller.hpp>
+#include <systems/repeated-controller.hpp>
 #include <asset-loader.hpp>
 
 // This state shows how to use the ECS framework and deserialization.
@@ -19,6 +20,7 @@ class Playstate: public our::State {
     our::MovementSystem movementSystem;
     our::CollisionSystem collisionSystem; 
     our::PlayerControllerSystem playerControllerSystem; 
+    our::RepeatControllerSystem repeatControllerSystem; 
 
     void onInitialize() override {
         // First of all, we get the scene configuration from the app config
@@ -35,13 +37,22 @@ class Playstate: public our::State {
         for(auto entity : world.getEntities()){
             if(entity->name == "player"){
                 playerControllerSystem.setPlayer(entity);
-                collisionSystem.setPlayer(entity); // ✅ Optional
+                // collisionSystem.setPlayer(entity); // ✅ Optional
                 break;
             }
         }
-
+        for(auto entity : world.getEntities()){
+            if(entity->name == "Camera"){
+                playerControllerSystem.setCamera(entity);
+                // collisionSystem.setPlayer(entity); // ✅ Optional
+                break;
+            }
+        }
+       
         // Provide app pointer to systems that need it
-        playerControllerSystem.setApplication(getApp());
+        playerControllerSystem.enter(getApp());
+      
+
 ///////////////////////////////////////////////////////////////////
         // We initialize the camera controller system since it needs a pointer to the app
         cameraController.enter(getApp());
@@ -54,7 +65,8 @@ class Playstate: public our::State {
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);
-        playerControllerSystem.update( (float)deltaTime); // ✅ NEW
+        playerControllerSystem.update( &world, (float)deltaTime); // ✅ NEW
+        repeatControllerSystem.update(&world, (float)deltaTime); // ✅ NEW
         // int collisionResult = collisionSystem.update(&world); // ✅ Optional
         // if (collisionResult == 1) {
         //     // Game won
