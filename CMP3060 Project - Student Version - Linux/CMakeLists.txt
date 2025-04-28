@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.0)   # Selects the minimum version of CMake r
 project(GFX-LAB VERSION 0.1.0)          # Here we select the project name and version
 
 find_package(OpenGL REQUIRED)
-find_package(GLEW REQUIRED)
+# find_package(GLEW REQUIRED)
 
 # Here we select C++17 with all the standards required and all compiler-specific extensions disabled
 set(CMAKE_CXX_STANDARD 17)
@@ -91,10 +91,28 @@ set(COMMON_SOURCES
         source/common/components/movement.cpp
         source/common/components/component-deserializer.hpp
 
+        source/common/components/health-controller.hpp
+        source/common/components/health-controller.cpp
+        source/common/components/collision.hpp
+        source/common/components/collision.cpp
+        source/common/components/key.hpp
+        source/common/components/key.cpp
+        source/common/components/player-controller.hpp
+        source/common/components/player-controller.cpp
+        source/common/components/key-collected.hpp
+        source/common/components/key-collected.cpp
+        source/common/components/repeated-controller.cpp
+        source/common/components/repeated-controller.hpp
+
+
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp
         source/common/systems/free-camera-controller.hpp
         source/common/systems/movement.hpp
+        source/common/systems/collision.hpp
+        source/common/systems/player-controller.hpp
+        source/common/systems/repeated-controller.hpp
+
 )
 
 # Define the directories in which to search for the included headers
@@ -138,4 +156,4 @@ set(STATES_SOURCES
 add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
 target_link_libraries(GAME_APPLICATION glfw)
 target_link_libraries(GAME_APPLICATION OpenGL::GL)
-target_link_libraries(GAME_APPLICATION GLEW::GLEW)
+# target_link_libraries(GAME_APPLICATION GLEW::GLEW)
