@@ -490,9 +490,10 @@
           ]
         },
         {
-          "position":  [0.3, 0, -35],
+          "position":  [2, 0, -15],
           "rotation": [0, 0, 0],
           "scale": [1, 1, 1],
+          "name":"key",
           "components": [
             {
               "type": "Mesh Renderer",
@@ -503,23 +504,28 @@
               "type": "Movement",
               "linearVelocity": [0, 0, 0],
               "angularVelocity": [0, 45, 0]
+            },{
+              "type": "collision"
             }
           ]
         },
         {
-          "position": [2, 2, -15],
+          "position": [0, 0, 5],
           "rotation": [0, 90, 0],
           "scale": [0.5, 0.5, 0.5],
+          "name" : "keymoc",
           "components": [
             {
               "type": "Mesh Renderer",
-              "mesh": "heart",
-              "material": "heart"
+              "mesh": "Key",
+              "material": "Key"
             },
             {
               "type": "Movement",
               "linearVelocity": [0, 0, 0],
               "angularVelocity": [0, 0, 0]
+            },{
+              "type": "collision"
             }
           ]
         },
@@ -538,6 +544,8 @@
             ,
             {
               "type": "PlayerController"
+            },{
+              "type":"Health"
             }
           ]
         },
@@ -608,6 +616,8 @@
               "type": "Mesh Renderer",
               "mesh": "door",
               "material": "door"
+            },{
+              "type": "collision"
             }
         
           ]
