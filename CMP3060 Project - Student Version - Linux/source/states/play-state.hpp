@@ -44,6 +44,7 @@ class Playstate : public our::State
             {
                 playerControllerSystem.setPlayer(entity);
                 collisionSystem.setPlayer(entity); // ✅ Optional
+
                 break;
             }
         }
