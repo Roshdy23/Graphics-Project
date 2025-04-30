@@ -7,6 +7,8 @@
  #include <iostream>
  namespace our
  {
+     LightComponent::~LightComponent() = default;
+     
      void LightComponent::deserialize(const nlohmann::json &data)
      {
          // Check if the JSON data is an object
@@ -32,10 +34,5 @@
  
          // Read the "displacement" value from the JSON object or use the default value from the member variable
          displacement = data.value("displacement", 0.0f);
-         
-     
-     }
-     LightComponent::~LightComponent() {
-         // Can be empty, but must exist
      }
  }
