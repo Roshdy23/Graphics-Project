@@ -503,6 +503,8 @@
               "type": "Movement",
               "linearVelocity": [0, 0, 0],
               "angularVelocity": [0, 45, 0]
+            },{
+              "type": "collision"
             }
           ]
         },
@@ -520,6 +522,8 @@
               "type": "Movement",
               "linearVelocity": [0, 0, 0],
               "angularVelocity": [0, 0, 0]
+            },{
+              "type": "collision"
             }
           ]
         },
@@ -608,6 +612,8 @@
               "type": "Mesh Renderer",
               "mesh": "door",
               "material": "door"
+            },{
+              "type": "collision"
             }
         
           ]

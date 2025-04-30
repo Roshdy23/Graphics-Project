@@ -143,6 +143,8 @@ namespace our
         transparentCommands.clear();
         for (auto entity : world->getEntities())
         {
+            if (entity->hidden)
+                continue;
             // If we hadn't found a camera yet, we look for a camera in this entity
             if (!camera)
                 camera = entity->getComponent<CameraComponent>();
@@ -182,8 +184,7 @@ namespace our
             // HINT: the following return should return true "first" should be drawn before "second". 
             float distance1 = glm::dot(first.center, cameraForward);
             float distance2 = glm::dot(second.center, cameraForward);
-            return distance1 < distance2;
-        });
+            return distance1 < distance2; });
 
         // TODO: (Req 9) Get the camera ViewProjection matrix and store it in VP
         glm::mat4 VP = camera->getProjectionMatrix(windowSize) * camera->getViewMatrix();
@@ -218,7 +219,7 @@ namespace our
         {
             glm::mat4 MVP = VP * command.localToWorld;
             command.material->setup();
-            command.material->shader->set("transform",MVP);
+            command.material->shader->set("transform", MVP);
             command.mesh->draw();
         }
 
@@ -257,10 +258,9 @@ namespace our
         {
             glm::mat4 MVP = VP * command.localToWorld;
             command.material->setup();
-            command.material->shader->set("transform",MVP);
+            command.material->shader->set("transform", MVP);
             command.mesh->draw();
         }
-
 
         // If there is a postprocess material, apply postprocessing
         if (postprocessMaterial)
@@ -271,7 +271,7 @@ namespace our
             // TODO: (Req 11) Setup the postprocess material and draw the fullscreen triangle
             postprocessMaterial->setup();
             glBindVertexArray(postProcessVertexArray);
-            glDrawArrays(GL_TRIANGLES, 0, 3);    
+            glDrawArrays(GL_TRIANGLES, 0, 3);
         }
     }
 
