@@ -280,6 +280,10 @@
             "vs": "assets/shaders/tinted.vert",
             "fs": "assets/shaders/tinted.frag"
           },
+          "light":{
+            "vs": "assets/shaders/light.vert",
+            "fs": "assets/shaders/light.frag"
+          },
           "textured": {
             "vs": "assets/shaders/textured.vert",
             "fs": "assets/shaders/textured.frag"
@@ -308,10 +312,6 @@
           "monster": "assets/models/monster.obj",
           "heart": "assets/models/heart.obj",
           "door": "assets/models/door.obj"
-
-          
-          
-
         },
         "samplers": {
           "default": {},
@@ -662,6 +662,22 @@
               "angularVelocity": [0, 5, 0]
             }
           ]
+        },
+        {
+          "position": [0, 1.5, -0.5],
+                  "scale": [0.05, 0.05, 0.05],
+                  "components": [
+                    {
+                      "type": "Lighting",
+                      "lightType": 0,
+                      "color": [1.0, 1.0, 0.0],
+                      "attenuation": [0.09, 0.09, 0.09],
+                      "position": [0, 10,0],
+                      "displacement": -3,
+                      "direction": [-0.5, 0.5, 0.0],
+                      "cone_angles": [0.4, 0.9]
+                    }
+                  ]
         }
       ]
     }

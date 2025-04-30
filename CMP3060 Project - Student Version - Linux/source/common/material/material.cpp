@@ -63,4 +63,44 @@ namespace our {
         sampler = AssetLoader<Sampler>::get(data.value("sampler", ""));
     }
 
+    void LightingMaterial::setup() const {
+        TintedMaterial::setup();
+    
+        struct TextureBinding {
+            const Texture2D* texture;
+            const char* uniformName;
+            GLenum textureUnit;
+        };
+    
+        const TextureBinding bindings[] = {
+            {albedo, "material.albedo", GL_TEXTURE0},
+            {specular, "material.specular", GL_TEXTURE1},
+            {emissive, "material.emissive", GL_TEXTURE2},
+            {roughness, "material.roughness", GL_TEXTURE3},
+            {ambient_occlusion, "material.ambient_occlusion", GL_TEXTURE4}
+        };
+    
+        for (int i = 0; i < 5; ++i) {
+            const auto& binding = bindings[i];
+            if (binding.texture) {
+                glActiveTexture(binding.textureUnit);
+                binding.texture->bind();
+                sampler->bind(i);
+                shader->set(binding.uniformName, i);
+            }
+        }
+    }
+    
+    void LightingMaterial::deserialize(const nlohmann::json& data) {
+        TintedMaterial::deserialize(data);
+        if (!data.is_object()) return;
+    
+        albedo = AssetLoader<Texture2D>::get(data.value("albedo", ""));
+        specular = AssetLoader<Texture2D>::get(data.value("specular", ""));
+        emissive = AssetLoader<Texture2D>::get(data.value("emissive", ""));
+        roughness = AssetLoader<Texture2D>::get(data.value("roughness", ""));
+        ambient_occlusion = AssetLoader<Texture2D>::get(data.value("ambient_occlusion", ""));
+        sampler = AssetLoader<Sampler>::get(data.value("sampler", ""));
+    }    
+
 }
