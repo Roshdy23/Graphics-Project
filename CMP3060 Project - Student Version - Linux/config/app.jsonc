@@ -513,17 +513,17 @@
           "position": [0, 0, 5],
           "rotation": [0, 90, 0],
           "scale": [0.5, 0.5, 0.5],
-          "name" : "keymoc",
+          "name" : "heart",
           "components": [
             {
               "type": "Mesh Renderer",
-              "mesh": "Key",
-              "material": "Key"
+              "mesh": "heart",
+              "material": "heart"
             },
             {
               "type": "Movement",
               "linearVelocity": [0, 0, 0],
-              "angularVelocity": [0, 0, 0]
+              "angularVelocity": [0, 90, 0]
             },{
               "type": "collision"
             }
@@ -546,6 +546,14 @@
               "type": "PlayerController"
             },{
               "type":"Health"
+            }, {
+              "type": "Key"
+            },
+            {
+              "type": "door"
+            },
+            {
+              "type": "monster"
             }
           ]
         },
@@ -610,7 +618,7 @@
           "position": [4, 1, -40],
           "rotation": [0, 0, 0],
           "scale": [1.5, 2, 1],
-          // "name":"door",
+          "name":"door",
           "components": [
             {
               "type": "Mesh Renderer",
@@ -660,6 +668,7 @@
           "position": [0, 0, -25],
           "rotation": [0, 0, 0],
           "scale": [1, 1, 1],
+          "name" :"enemy",
           "components": [
             {
               "type": "Mesh Renderer",

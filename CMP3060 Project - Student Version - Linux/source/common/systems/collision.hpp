@@ -34,20 +34,20 @@ namespace our
             std::string name = (a->name != "") ? a->name : "nullptr";
             if (name == "nullptr")
                 return 0;
-            std::cout << a->name << " Pos: " << apos.x << ", " << apos.y << ", " << apos.z << " | Size: "
-                      << asize.x << ", " << asize.y << ", " << asize.z << "\n";
-            std::cout << "player Pos: " << bpos.x << ", " << bpos.y << ", " << bpos.z << " | Size: "
-                      << bsize.x << ", " << bsize.y << ", " << bsize.z << "\n";
+            // std::cout << a->name << " Pos: " << apos.x << ", " << apos.y << ", " << apos.z << " | Size: "
+            //           << asize.x << ", " << asize.y << ", " << asize.z << "\n";
+            // std::cout << "player Pos: " << bpos.x << ", " << bpos.y << ", " << bpos.z << " | Size: "
+            //           << bsize.x << ", " << bsize.y << ", " << bsize.z << "\n";
             float temp1 = std::abs(apos.x - bpos.x) * 2;
             float temp2 = std::abs(apos.y - bpos.y) * 2;
             float temp3 = std::abs(apos.z - bpos.z) * 2;
-            std::cout << "temp1: " << temp1 << ", temp2: " << temp2 << ", temp3: " << temp3 << "\n";
-            std::cout << "asize: " << asize.x + bsize.x << ", " << asize.y + bsize.y << ", " << asize.z + bsize.z << "\n";
+            // std::cout << "temp1: " << temp1 << ", temp2: " << temp2 << ", temp3: " << temp3 << "\n";
+            // std::cout << "asize: " << asize.x + bsize.x << ", " << asize.y + bsize.y << ", " << asize.z + bsize.z << "\n";
 
             bool ok = (std::abs(apos.x - bpos.x) * 2 < (asize.x + bsize.x)) &&
                       (std::abs(apos.y - bpos.y) * 2 < (asize.y + bsize.y)) &&
                       (std::abs(apos.z - bpos.z) * 2 < (asize.z + bsize.z));
-            std::cout << "Collision check: " << ok << "\n";
+            // std::cout << "Collision check: " << ok << "\n";
             return ok;
         }
 
@@ -62,7 +62,7 @@ namespace our
                 {
                     std::string name = entity->name;
                     std::cout << "Collision detected with entity: " << name << "\n";
-                    if (name == "keymoc")
+                    if (name == "heart")
                     {
                         std::cout << "Health pack collision detected. Hiding entity...\n";
                         HealthComponent *healthComponent = player->getComponent<HealthComponent>();
@@ -81,12 +81,18 @@ namespace our
                     }
                     else if (name == "key")
                     {
-                        // PlayerInventoryComponent *inventoryComponent = player->getComponent<PlayerInventoryComponent>();
-                        // inventoryComponent->keysCollected += 1;
+                        PlayerInventoryComponent *inventoryComponent = player->getComponent<PlayerInventoryComponent>();
+                        if (inventoryComponent == nullptr)
+                        {
+                            std::cerr << "Inventory component not found on player entity.\n";
+                            return 0; // No inventory component, no action taken
+                        }
+                        inventoryComponent->keysCollected += 1;
                         entity->hidden = true; // Or remove from the world
                     }
                     else if (name == "door" && player->getComponent<PlayerInventoryComponent>()->keysCollected == 3)
                     {
+                        std::cout << "Door unlocked! You can exit the game.\n";
                         return 1; // Game won: All keys collected and door is unlocked
                     }
                     else if (name == "enemy")
@@ -98,6 +104,7 @@ namespace our
                             healthComponent->isAlive = false;
                             return -1; // Player died
                         }
+                        std::cout << "Player health decreased to: " << healthComponent->health << "\n";
                     }
                 }
             }
