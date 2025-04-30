@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)  # Updated to support C++17 properly
+cmake_minimum_required(VERSION 3.1)  # Updated to support C++17 properly
 project(GFX-LAB VERSION 0.1.0)
 
 # Find OpenGL

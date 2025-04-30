@@ -1,35 +1,27 @@
 #pragma once
- 
- #include "../ecs/component.hpp"
- 
- #include <glm/glm.hpp>
- 
- namespace our
- {
- 
-     class LightComponent : public Component
-     {
-     public:
-         // TODO: Add more members if needed
-         int lightType;         // Type of the light: 0 for directional, 1 for point, 2 for spot
-         glm::vec3 direction;   // Direction of the light (for directional light)
-         glm::vec3 position;    // Position of the light (for point light)
-         glm::vec3 color;       // Ambient and specular color of the light
-         glm::vec3 attenuation; // Attenuation factors for the light (controls falloff)
-         glm::vec2 cone_angles; // Cone angles for spot lighting (inner and outer angles)
-         float displacement;    // Displacement of the light (for point light)
-         
-         #define DIRECTIONAL 0
-         #define POINT       1
-         #define SPOT        2
- 
-         // The ID of this component type is "Lighting"
-         static std::string getID() { return "Lighting"; }
- 
-         // Reads light component data from the given JSON object
-         void deserialize(const nlohmann::json &data) override;
-         virtual ~LightComponent();
- 
-     };
- 
- }
+#include "../ecs/component.hpp"
+#include <glm/glm.hpp>
+
+namespace our {
+    class LightComponent : public Component {
+    public:
+        // Light types as enum (better than #define)
+        enum Type { DIRECTIONAL = 0, POINT = 1, SPOT = 2 };
+
+        // Members with default values
+        int lightType = DIRECTIONAL;
+        glm::vec3 direction{0.0f, 0.0f, -1.0f};
+        glm::vec3 position{0.0f, 0.0f, 0.0f};
+        glm::vec3 color{1.0f, 1.0f, 1.0f};
+        glm::vec3 attenuation{1.0f, 0.0f, 0.0f};
+        glm::vec2 cone_angles{glm::radians(15.0f), glm::radians(30.0f)};
+        float displacement = 0.0f;
+
+        // Required Component implementations
+        static std::string getID() { return "Lighting"; }
+        void deserialize(const nlohmann::json& data) override;
+        
+        // Virtual destructor
+        ~LightComponent() override = default;
+    };
+}
