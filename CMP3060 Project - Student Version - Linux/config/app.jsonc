@@ -295,8 +295,14 @@
           "zombie": "assets/textures/Pennywise.png",
           "monster": "assets/textures/monster.png",
           "heart": "assets/textures/heart.jpeg",
-           "door": "assets/textures/door.png",
-           "pennywise":"assets/textures/pennywise.png"
+          "door": "assets/textures/door.png",
+          "pennywise":"assets/textures/pennywise.png",
+    
+          "enemy2":"assets/textures/gren_skin.jpg",
+          "room":"assets/textures/room.png",
+          "school_corridor":"assets/textures/school_corridor.png",
+          "corr4":"assets/textures/corr4.png"
+
         },
         "meshes": {
           "cube": "assets/models/cube.obj",
@@ -307,10 +313,11 @@
           "pennywise": "assets/models/Pennywise.obj",
           "monster": "assets/models/monster.obj",
           "heart": "assets/models/heart.obj",
-          "door": "assets/models/door.obj"
-
-          
-          
+          "door": "assets/models/door2.obj",
+          "enemy2":"assets/models/enemy2.obj",
+          "room":"assets/models/room.obj",
+          "school_corridor":"assets/models/school_corridor.obj",
+          "corr4":"assets/models/corr4.obj"         
 
         },
         "samplers": {
@@ -400,7 +407,7 @@
             "texture": "heart",
             "sampler": "default"
           },
-          "moon": {
+          "corr4": {
             "type": "textured",
             "shader": "textured",
             "pipelineState": {
@@ -412,7 +419,7 @@
               }
             },
             "tint": [1, 1, 1, 1],
-            "texture": "moon",
+            "texture": "corr4",
             "sampler": "default"
           },
           "bridge": {
@@ -460,6 +467,21 @@
             "texture": "monster",
             "sampler": "default"
           },
+          "enemy2": {
+            "type": "textured",
+            "shader": "textured",
+            "pipelineState": {
+              "faceCulling": {
+                "enabled": false
+              },
+              "depthTesting": {
+                "enabled": true
+              }
+            },
+            "tint": [1, 1, 1, 1],
+            "texture": "enemy2",
+            "sampler": "default"
+          },
           "door": {
             "type": "textured",
             "shader": "textured",
@@ -474,23 +496,74 @@
             "tint": [1, 1, 1, 1],
             "texture": "door",
             "sampler": "default"
+          },
+          "room": {
+            "type": "textured",
+            "shader": "textured",
+            "pipelineState": {
+              "faceCulling": {
+                "enabled": false
+              },
+              "depthTesting": {
+                "enabled": true
+              }
+            },
+            "tint": [1, 1, 1, 1],
+            "texture": "room",
+            "sampler": "default"
+          },
+          "school_corridor": {
+            "type": "textured",
+            "shader": "textured",
+            "pipelineState": {
+              "faceCulling": {
+                "enabled": false
+              },
+              "depthTesting": {
+                "enabled": true
+              }
+            },
+            "tint": [1, 1, 1, 1],
+            "texture": "room",
+            "sampler": "default"
           }
         }
       },
       "world": [
         {
           "position": [0, 1, 10],
+          "name":"Camera",
           "components": [
             {
               "type": "Camera"
+            },
+            {
+              "type": "Free Camera Controller"
             }
-            // {
-            //   "type": "Free Camera Controller"
-            // }
           ]
         },
         {
-          "position":  [2, 0, -15],
+          "position":  [1.2, 0, -38],
+          "rotation": [0, 0, 0],
+          "scale": [1, 1, 1],
+          "name":"key",
+          "components": [
+            {
+              "type": "Mesh Renderer",
+              "mesh": "Key",
+              "material": "Key"
+            },
+            {
+              "type": "Movement",
+              "linearVelocity": [0, 0, 0],
+              "angularVelocity": [0, 45, 0]
+            },{
+              "type": "collision"
+            }
+          ]
+        },
+        {
+          "position":  [1.5, -1, -93],
           "rotation": [0, 0, 0],
           "scale": [1, 1, 1],
           "name":"key",
@@ -527,6 +600,12 @@
             },{
               "type": "collision"
             }
+            // ,
+            // {
+            //   "type": "Repeat Controller",
+            //   "entityType":"heart",
+            //   "initialOffsetZ":10
+            // }
           ]
         },
         {
@@ -539,8 +618,7 @@
               "type": "Mesh Renderer",
               "mesh": "pennywise",
               "material": "pennywise"
-            }
-    
+            }    
             ,
             {
               "type": "PlayerController"
@@ -548,15 +626,13 @@
               "type":"Health"
             }, {
               "type": "Key"
-            },
-            {
-              "type": "door"
-            },
-            {
-              "type": "monster"
             }
+       
+   
+       
           ]
         },
+        
         {
           "position": [0, -6, 5],
           "rotation": [0, 90, 0],
@@ -614,22 +690,136 @@
         
           ]
         },
+        // {
+        //   "position": [2, -1, -45],
+        //   "rotation": [0, 0, 0],
+        //   "scale": [1, 1, 1],
+        //   "name":"door",
+        //   "components": [
+        //     {
+        //       "type": "Mesh Renderer",
+        //       "mesh": "door",
+        //       "material": "door"
+        //     },{
+        //       "type": "collision"
+        //     }
+        
+        //   ]
+        // },
+        /////////////////////////////////////////////////////// first stage
         {
-          "position": [4, 1, -40],
-          "rotation": [0, 0, 0],
-          "scale": [1.5, 2, 1],
-          "name":"door",
+          "position": [0, -6, -55],
+          "rotation": [0, 90, 0],
+          "scale": [1, 1, 1],
+          // "name":"bridge",
           "components": [
             {
               "type": "Mesh Renderer",
-              "mesh": "door",
-              "material": "door"
-            },{
-              "type": "collision"
+              "mesh": "bridge",
+              "material": "bridge"
             }
         
           ]
         },
+        {
+          "position": [3, -1, -77],
+          "rotation": [0, 0, 0],
+          "scale": [1, 1.5, 1],
+          "name":"room",
+          "components": [
+            {
+              "type": "Mesh Renderer",
+              "mesh": "room",
+              "material": "room"
+            }
+        
+          ]
+        },
+        {
+          "position": [0, -1, -77],
+          "rotation": [0, 90, 0],
+          "scale": [0.5, 0.5, 0.5],
+          "name" : "heart",
+          "components": [
+            {
+              "type": "Mesh Renderer",
+              "mesh": "heart",
+              "material": "heart"
+            },
+            {
+              "type": "Movement",
+              "linearVelocity": [0, 0, 0],
+              "angularVelocity": [0, 90, 0]
+            },{
+              "type": "collision"
+            }
+            // ,
+            // {
+            //   "type": "Repeat Controller",
+            //   "entityType":"heart",
+            //   "initialOffsetZ":10
+            // }
+          ]
+        },
+
+        // {
+        //   "position": [0, -7, -85],
+        //   "rotation": [0, 90, 0],
+        //   "scale": [1, 1, 1],
+        //   "name":"bridge",
+        //   "components": [
+        //     {
+        //       "type": "Mesh Renderer",
+        //       "mesh": "bridge",
+        //       "material": "bridge"
+        //     }
+        
+        //   ]
+        // },
+        // {
+        //   "position": [2.9, -1,-110],
+        //   "rotation": [0, 0, 0],
+        //   "scale": [1, 2, 1],
+        //   "name":"school_corridor",
+        //   "components": [
+        //     {
+        //       "type": "Mesh Renderer",
+        //       "mesh": "school_corridor",
+        //       "material": "school_corridor"
+        //     }
+        
+        //   ]
+        // },
+          
+
+                {
+          "position": [3, -1,-90],
+          "rotation": [0, 0, 0],
+          "scale": [2, 2, 1],
+          "name":"corr4",
+          "components": [
+            {
+              "type": "Mesh Renderer",
+              "mesh": "corr4",
+              "material": "corr4"
+            }
+        
+          ]
+        },
+        // {
+        //   "position": [0, -6, -55],
+        //   "rotation": [0, 90, 0],
+        //   "scale": [1, 1, 1],
+        //   // "name":"bridge",
+        //   "components": [
+        //     {
+        //       "type": "Mesh Renderer",
+        //       "mesh": "bridge",
+        //       "material": "bridge"
+        //     }
+        
+        //   ]
+        // },
         // {
         //     "position": [0.2, 0, -0.3],
         //     "rotation": [0, 0, 0],
@@ -665,8 +855,37 @@
         //   ]
         // },
         {
+          "position": [-0.5, -1, -95],
+          "rotation": [0, 180, 0],
+          "scale": [1, 1, 1],
+          "name" :"enemy",
+          "components": [
+            {
+              "type": "Mesh Renderer",
+              "mesh": "enemy2",
+              "material": "enemy2"
+            },
+            {
+              "type": "Movement",
+              "linearVelocity": [0, 0, 0],
+              "angularVelocity": [0, 5, 0]
+            },
+            {
+            "type": "collision"
+            }
+            
+            // ,
+            // {
+            //   "type": "Repeat Controller",
+            //   "entityType":"ghost",
+            //   "initialOffsetZ":35
+
+            // }
+          ]
+        },
+        {
           "position": [0, 0, -25],
-          "rotation": [0, 0, 0],
+          "rotation": [0, 180, 0],
           "scale": [1, 1, 1],
           "name" :"enemy",
           "components": [
@@ -679,9 +898,21 @@
               "type": "Movement",
               "linearVelocity": [0, 0, 0],
               "angularVelocity": [0, 5, 0]
+            },
+            {
+            "type": "collision"
             }
+            
+            // ,
+            // {
+            //   "type": "Repeat Controller",
+            //   "entityType":"ghost",
+            //   "initialOffsetZ":35
+
+            // }
           ]
         }
+        
       ]
     }
   }

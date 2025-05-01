@@ -53,7 +53,7 @@ class Playstate : public our::State
             if (entity->name == "Camera")
             {
                 playerControllerSystem.setCamera(entity);
-                // collisionSystem.setPlayer(entity); // ✅ Optional
+                repeatControllerSystem.setCamera(entity); // ✅ Optional
                 break;
             }
         }

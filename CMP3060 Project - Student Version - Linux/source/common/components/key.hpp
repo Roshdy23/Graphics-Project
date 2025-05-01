@@ -10,6 +10,7 @@ namespace our {
     public:
         std::string keyType;    // The type of the key (e.g., "GoldenKey", "SilverKey")
         bool isCollected = false; // Whether the key has been collected
+        int keysCollected = 0;
 
         static std::string getID() { return "Key"; }
 

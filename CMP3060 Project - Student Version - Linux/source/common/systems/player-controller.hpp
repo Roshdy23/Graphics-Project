@@ -180,13 +180,16 @@ namespace our
                 glm::vec3 newCameraPosition = position;
 
                 // Position camera slightly behind the player along Z-axis
-                newCameraPosition.z = position.z - 1.0f;
+                newCameraPosition.z = position.z + 0.5f;
 
                 // Adjust the camera's height (slightly above the player for a better view)
-                // newCameraPosition.y = position.y + 3.0f;
+                newCameraPosition.y = position.y + 2.5f;
 
                 // Update camera's position
                 cameraEntity->localTransform.position = newCameraPosition;
+                        // Print the Z positions
+        // std::cout << "Player Z Position: " << position.z << std::endl;
+        // std::cout << "Camera Z Position: " << newCameraPosition.z << std::endl;
             }
         }
 

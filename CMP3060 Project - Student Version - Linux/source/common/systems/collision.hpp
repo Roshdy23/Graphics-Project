@@ -5,6 +5,7 @@
 #include "../components/player-controller.hpp"
 #include "../components/health-controller.hpp"
 #include "../components/key-collected.hpp"
+#include "../components/key.hpp"
 #include "../application.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
@@ -18,8 +19,10 @@ namespace our
     class CollisionSystem
     {
         Entity *player;
+       
 
     public:
+        KeyComponent* inventoryComponent ;
         void setPlayer(Entity *playerEntity)
         {
             this->player = playerEntity;
@@ -81,16 +84,17 @@ namespace our
                     }
                     else if (name == "key")
                     {
-                        PlayerInventoryComponent *inventoryComponent = player->getComponent<PlayerInventoryComponent>();
+                        inventoryComponent = player->getComponent<KeyComponent>();
                         if (inventoryComponent == nullptr)
                         {
                             std::cerr << "Inventory component not found on player entity.\n";
                             return 0; // No inventory component, no action taken
                         }
                         inventoryComponent->keysCollected += 1;
+                        std::cerr << "playerer has keys now  ."<<inventoryComponent->keysCollected<<"\n";
                         entity->hidden = true; // Or remove from the world
                     }
-                    else if (name == "door" && player->getComponent<PlayerInventoryComponent>()->keysCollected == 3)
+                    else if (name == "door" && player->getComponent<KeyComponent>()->keysCollected == 1)
                     {
                         std::cout << "Door unlocked! You can exit the game.\n";
                         return 1; // Game won: All keys collected and door is unlocked
