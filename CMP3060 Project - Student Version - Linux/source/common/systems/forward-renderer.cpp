@@ -5,7 +5,7 @@
 
 namespace our
 {
-
+    bool lit = false;
     void ForwardRenderer::initialize(glm::ivec2 windowSize, const nlohmann::json &config)
     {
         // First, we store the window size for later use
@@ -134,6 +134,7 @@ namespace our
             delete postprocessMaterial->shader;
             delete postprocessMaterial;
         }
+        lights = {};
     }
 
     void ForwardRenderer::render(World *world)
@@ -167,8 +168,17 @@ namespace our
                     opaqueCommands.push_back(command);
                 }
             }
+            if (auto light = entity->getComponent<LightComponent>(); light)
+            {
+                if (light)
+                {   
+                    lights.push_back(light);
+                }
+                
+            }
+            
         }
-
+        lit = true;
         // If there is no camera, we return (we cannot render without a camera)
         if (camera == nullptr)
             return;
@@ -221,6 +231,30 @@ namespace our
             command.material->setup();
             command.material->shader->set("transform",MVP);
             command.mesh->draw();
+            if(auto material_light = dynamic_cast<LightingMaterial*>(command.material);material_light){
+                 material_light->shader->set("sky.top", glm::vec3    (0.0f, 0.1f, 0.5f));
+                 material_light->shader->set("sky.horizon", glm::vec3(0.3f, 0.3f, 0.3f));
+                 material_light->shader->set("sky.bottom", glm::vec3 (0.1f, 0.1f, 0.1f));
+ 
+                 material_light->shader->set("light_count", int(lights.size()));
+ 
+                 material_light->shader->set("VP", VP);
+                 material_light->shader->set("M_IT",glm::transpose(glm::inverse(command.localToWorld)));
+                 glm::vec3 cameraPosition = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, 0, 0, 1);
+ 
+                 material_light->shader->set("camera_position",cameraPosition);
+                 material_light->shader->set("M", command.localToWorld);
+                 
+                 for(int i=0;i<lights.size();i++)            
+                 {
+                     material_light->shader->set("lights[" + std::to_string(i) + "].position", lights[i]->position);                    material_light->shader->set("lights[" + std::to_string(i) + "].position", lights[i]->position);
+                     material_light->shader->set("lights["+std::to_string(i)+"].type",lights[i]->lightType);                    material_light->shader->set("lights["+std::to_string(i)+"].type",lights[i]->lightType);
+                     material_light->shader->set("lights["+std::to_string(i)+"].direction",lights[i]->direction);                    material_light->shader->set("lights["+std::to_string(i)+"].direction",lights[i]->direction);
+                     material_light->shader->set("lights["+std::to_string(i)+"].color",lights[i]->color);                    material_light->shader->set("lights["+std::to_string(i)+"].color",lights[i]->color);
+                     material_light->shader->set("lights["+std::to_string(i)+"].attenuation",lights[i]->attenuation);                    material_light->shader->set("lights["+std::to_string(i)+"].attenuation",lights[i]->attenuation);
+                     material_light->shader->set("lights["+std::to_string(i)+"].cone_angles",lights[i]->cone_angles);                    material_light->shader->set("lights["+std::to_string(i)+"].cone_angles",lights[i]->cone_angles);
+                 }
+            }
         }
 
         // If there is a sky material, draw the sky
