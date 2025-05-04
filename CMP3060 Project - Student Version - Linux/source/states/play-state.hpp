@@ -43,7 +43,8 @@ class Playstate : public our::State
             if (entity->name == "player")
             {
                 playerControllerSystem.setPlayer(entity);
-                // collisionSystem.setPlayer(entity); // ✅ Optional
+                collisionSystem.setPlayer(entity); // ✅ Optional
+
                 break;
             }
         }
@@ -52,7 +53,7 @@ class Playstate : public our::State
             if (entity->name == "Camera")
             {
                 playerControllerSystem.setCamera(entity);
-                // collisionSystem.setPlayer(entity); // ✅ Optional
+                repeatControllerSystem.setCamera(entity); // ✅ Optional
                 break;
             }
         }
@@ -75,15 +76,18 @@ class Playstate : public our::State
         cameraController.update(&world, (float)deltaTime);
         playerControllerSystem.update(&world, (float)deltaTime); // ✅ NEW
         repeatControllerSystem.update(&world, (float)deltaTime); // ✅ NEW
-        // int collisionResult = collisionSystem.update(&world); // ✅ Optional
-        // if (collisionResult == 1) {
-        //     // Game won
-        //     getApp()->changeState("win");
-        // } else if (collisionResult == -1) {
-        //     // Game lost
-        //     getApp()->changeState("lose");
-        // }
-        // And finally we use the renderer system to draw the scene
+        int collisionResult = collisionSystem.update(&world);    // ✅ Optional
+        if (collisionResult == 1)
+        {
+            // Game won
+            getApp()->changeState("win");
+        }
+        else if (collisionResult == -1)
+        {
+            // Game lost
+            getApp()->changeState("lose");
+        }
+
         renderer.render(&world);
 
         // Get a reference to the keyboard object

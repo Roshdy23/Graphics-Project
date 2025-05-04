@@ -21,6 +21,9 @@ namespace our
         unsigned int VAO = 0;
         // We need to remember the number of elements that will be draw by glDrawElements
         GLsizei elementCount = 0;
+        // Bounding box for the mesh
+        glm::vec3 boundingBoxMin;
+        glm::vec3 boundingBoxMax;
 
     public:
         // The constructor takes two vectors:
@@ -30,6 +33,32 @@ namespace our
         // a vertex buffer to store the vertex data on the VRAM,
         // an element buffer to store the element data on the VRAM,
         // a vertex array object to define how to read the vertex & element buffer during rendering
+        void calculateBoundingBox(const std::vector<Vertex> &vertices)
+        {
+            if (vertices.empty())
+                return; // Early exit if no vertices are present
+
+            // Initialize bounding box to the first vertex
+            boundingBoxMin = vertices[0].position;
+            boundingBoxMax = vertices[0].position;
+
+            // Loop through all vertices to find the min and max
+            for (const auto &v : vertices)
+            {
+                boundingBoxMin = glm::min(boundingBoxMin, v.position);
+                boundingBoxMax = glm::max(boundingBoxMax, v.position);
+            }
+        }
+        glm::vec3 getBoundingBoxMin() const
+        {
+            return boundingBoxMin;
+        }
+
+        // Getter for bounding box max
+        glm::vec3 getBoundingBoxMax() const
+        {
+            return boundingBoxMax;
+        }
         Mesh(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &elements)
         {
             // TODO: (Req 2) Write this function
@@ -68,6 +97,7 @@ namespace our
             glVertexAttribPointer(ATTRIB_LOC_NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, normal));
 
             glBindVertexArray(0);
+            calculateBoundingBox(vertices);
         }
 
         // this function should render the mesh
