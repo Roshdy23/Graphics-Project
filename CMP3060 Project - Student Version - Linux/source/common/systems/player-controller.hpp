@@ -44,6 +44,11 @@ namespace our
             targetLanePosition = playerEntity->localTransform.position;
         }
 
+        Entity *getPlayer()
+        {
+            return playerEntity;
+        }
+
         void setCamera(Entity *camera)
         {
             this->cameraEntity = camera;
@@ -155,7 +160,7 @@ namespace our
             // Matrix for direction vectors
             glm::mat4 matrix = playerEntity->localTransform.toMat4();
             glm::vec3 front = glm::vec3(matrix * glm::vec4(0, 0, -0.5, 0)); // Forward direction
-            glm::vec3 right = glm::vec3(matrix * glm::vec4(-0.5, 0, 0, 0));  // Right direction
+            glm::vec3 right = glm::vec3(matrix * glm::vec4(-0.5, 0, 0, 0)); // Right direction
 
             // --- Forward Movement (Up Arrow Key)
             if (app->getKeyboard().isPressed(GLFW_KEY_UP))
