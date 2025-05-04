@@ -40,7 +40,7 @@
           "heart": "assets/textures/heart.jpeg",
           "door": "assets/textures/door.png",
           "pennywise":"assets/textures/pennywise.png",
-    
+          "white": "assets/textures/white.png",
           "enemy2":"assets/textures/gren_skin.jpg",
           "room":"assets/textures/room.png",
           "school_corridor":"assets/textures/school_corridor.png",
