@@ -54,6 +54,18 @@ namespace our {
     };
 
     // todo litmaterial
+    class LightingMaterial : public TintedMaterial {
+        public:
+            Texture2D  *albedo;
+            Texture2D *specular;
+            Texture2D *emissive;
+            Texture2D *roughness;
+            Texture2D *ambient_occlusion;
+            Sampler* sampler;
+    
+            void setup() const override;
+            void deserialize(const nlohmann::json& data) override;
+        };
 
     // This function returns a new material instance based on the given type
     inline Material* createMaterialFromType(const std::string& type){
@@ -61,7 +73,11 @@ namespace our {
             return new TintedMaterial();
         } else if(type == "textured"){
             return new TexturedMaterial();
-        } else {
+        }
+        else if (type == "light"){
+            return new LightingMaterial();
+        }
+        else {
             return new Material();
         }
     }

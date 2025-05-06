@@ -66,7 +66,7 @@ class Playstate : public our::State
         cameraController.enter(getApp());
         // Then we initialize the renderer
         auto size = getApp()->getFrameBufferSize();
-        renderer.initialize(size, config["renderer"]);
+        renderer.initialize(size, config["renderer"], playerControllerSystem.getPlayer());
     }
 
     void onDraw(double deltaTime) override

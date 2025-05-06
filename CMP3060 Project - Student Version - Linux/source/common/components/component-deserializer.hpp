@@ -12,6 +12,7 @@
 #include "player-controller.hpp"
 #include "collision.hpp"
 #include "repeated-controller.hpp"
+#include "light.hpp"
 
 namespace our
 {
@@ -27,6 +28,11 @@ namespace our
         {
             component = entity->addComponent<CameraComponent>();
         }
+        else if (type == LightComponent::getID())
+        {
+            component = entity->addComponent<LightComponent>();
+        }
+        
         else if (type == FreeCameraControllerComponent::getID())
         {
             component = entity->addComponent<FreeCameraControllerComponent>();

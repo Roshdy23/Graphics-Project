@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 4.0.0)  # Updated to support C++17 properly
 
 project(GLFW VERSION 3.3.2 LANGUAGES C)
 
