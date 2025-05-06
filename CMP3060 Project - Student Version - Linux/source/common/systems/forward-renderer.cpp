@@ -2,6 +2,8 @@
 #include "../mesh/mesh-utils.hpp"
 #include "../texture/texture-utils.hpp"
 #include <iostream>
+#include "../components/health-controller.hpp"
+#include <GLFW/glfw3.h>
 
 namespace our
 {
@@ -145,6 +147,9 @@ namespace our
         opaqueCommands.clear();
         transparentCommands.clear();
         glm::vec3 playerPosition = player->localTransform.position;
+
+        float playerStealthLevel = 1.0f;
+
         for (auto entity : world->getEntities())
         {
             if (entity->hidden)
@@ -152,6 +157,12 @@ namespace our
             // If we hadn't found a camera yet, we look for a camera in this entity
             if (!camera)
                 camera = entity->getComponent<CameraComponent>();
+
+            if(entity->name == "player"){
+                playerStealthLevel = entity->getComponent<HealthComponent>()->health;
+                playerStealthLevel = (playerStealthLevel + 20 <= 100) ? playerStealthLevel += 20 : playerStealthLevel;
+            }
+
             // If this entity has a mesh renderer component
             if (auto meshRenderer = entity->getComponent<MeshRendererComponent>(); meshRenderer)
             {
@@ -326,9 +337,10 @@ namespace our
 
             // TODO: (Req 11) Setup the postprocess material and draw the fullscreen triangle
             postprocessMaterial->setup();
+            postprocessMaterial->shader->set("stealthLevel", playerStealthLevel / 100.0f);
+            postprocessMaterial->shader->set("time", (float)glfwGetTime());
             glBindVertexArray(postProcessVertexArray);
             glDrawArrays(GL_TRIANGLES, 0, 3);
         }
     }
-
 }

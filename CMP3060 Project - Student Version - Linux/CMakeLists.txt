@@ -1,8 +1,9 @@
-cmake_minimum_required(VERSION 3.1)  # Updated to support C++17 properly
+cmake_minimum_required(VERSION 4.0.0)  # Updated to support C++17 properly
 project(GFX-LAB VERSION 0.1.0)
 
 # Find OpenGL
 find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
