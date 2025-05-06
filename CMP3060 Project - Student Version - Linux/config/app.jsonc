@@ -19,6 +19,10 @@
             "vs": "assets/shaders/tinted.vert",
             "fs": "assets/shaders/tinted.frag"
           },
+          "light":{
+            "vs": "assets/shaders/light.vert",
+            "fs": "assets/shaders/light.frag"
+          },
           "textured": {
             "vs": "assets/shaders/textured.vert",
             "fs": "assets/shaders/textured.frag"
@@ -36,7 +40,7 @@
           "heart": "assets/textures/heart.jpeg",
           "door": "assets/textures/door.png",
           "pennywise":"assets/textures/pennywise.png",
-    
+          "white": "assets/textures/white.png",
           "enemy2":"assets/textures/gren_skin.jpg",
           "enemy3":"assets/textures/enemy3.png",
           "room":"assets/textures/room.png",
@@ -164,8 +168,8 @@
             "sampler": "default"
           },
           "bridge": {
-            "type": "textured",
-            "shader": "textured",
+            "type": "light",
+            "shader": "light",
             "pipelineState": {
               "faceCulling": {
                 "enabled": false
@@ -176,7 +180,12 @@
             },
             "tint": [1, 1, 1, 1],
             "texture": "bridge",
-            "sampler": "default"
+            "sampler": "default",
+            "albedo": "bridge",
+            "specular": "white",
+            "roughness": "bridge",
+            "emissive": "bridge",
+            "ambient_occlusion": "bridge"
           },
           "pennywise": {
             "type": "textured",
@@ -388,8 +397,15 @@
               "type": "Mesh Renderer",
               "mesh": "pennywise",
               "material": "pennywise"
-            }    
-            ,
+            },
+            {
+              "type": "Lighting",
+              "lightType": 2,
+              "color": [1.0, 0.0, 0.0],
+              "attenuation": [0.05, 0.05, 0.05],
+              "direction": [0.0, 0.0, -1.0],
+              "cone_angles": [0.5, 0.9]
+            },
             {
               "type": "PlayerController"
             },{
@@ -685,7 +701,23 @@
               "type": "Movement",
               "linearVelocity": [0, 0, 0],
               "angularVelocity": [0, 5, 0]
-            },
+            }
+          ]
+        },
+        {
+          "position": [0, 1.5, -0.5],
+                  "scale": [0.05, 0.05, 0.05],
+                  "components": [
+                    {
+                      "type": "light",
+                      "lightType": 0,
+                      "color": [1.0, 1.0, 0.0],
+                      "attenuation": [0.09, 0.09, 0.09],
+                      "position": [0, 10,0],
+                      "displacement": -3,
+                      "direction": [-0.5, 0.5, 0.0],
+                      "cone_angles": [0.4, 0.9]
+                    },
             {
             "type": "collision"
             }
@@ -697,7 +729,7 @@
             //   "initialOffsetZ":35
 
             // }
-          ]
+                  ]
         }
         
       ]
