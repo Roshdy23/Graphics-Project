@@ -19,10 +19,9 @@ namespace our
     class CollisionSystem
     {
         Entity *player;
-       
 
     public:
-        KeyComponent* inventoryComponent ;
+        KeyComponent *inventoryComponent;
         void setPlayer(Entity *playerEntity)
         {
             this->player = playerEntity;
@@ -91,7 +90,7 @@ namespace our
                             return 0; // No inventory component, no action taken
                         }
                         inventoryComponent->keysCollected += 1;
-                        std::cerr << "playerer has keys now  ."<<inventoryComponent->keysCollected<<"\n";
+                        std::cerr << "playerer has keys now  ." << inventoryComponent->keysCollected << "\n";
                         entity->hidden = true; // Or remove from the world
                     }
                     else if (name == "door" && player->getComponent<KeyComponent>()->keysCollected == 1)
@@ -109,6 +108,7 @@ namespace our
                             return -1; // Player died
                         }
                         std::cout << "Player health decreased to: " << healthComponent->health << "\n";
+                        entity->hidden = true; // Or remove from the world
                     }
                 }
             }
