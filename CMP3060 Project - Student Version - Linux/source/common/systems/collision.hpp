@@ -63,52 +63,60 @@ namespace our
                 if (checkAABBCollision(entity, player))
                 {
                     std::string name = entity->name;
-                    std::cout << "Collision detected with entity: " << name << "\n";
-                    if (name == "heart")
+                    if (name == "heart" || name == "key" || name == "enemy"||name == "door")
                     {
-                        std::cout << "Health pack collision detected. Hiding entity...\n";
-                        HealthComponent *healthComponent = player->getComponent<HealthComponent>();
-                        if (healthComponent == nullptr)
+                        std::cout << "Collision detected with entity: " << name << "\n";
+                        if (name == "heart")
                         {
-                            std::cerr << "Health component not found on player entity.\n";
-                            return 0; // No health component, no action taken
+                            std::cout << "Health pack collision detected. Hiding entity...\n";
+                            HealthComponent *healthComponent = player->getComponent<HealthComponent>();
+                            if (healthComponent == nullptr)
+                            {
+                                std::cerr << "Health component not found on player entity.\n";
+                                return 0; // No health component, no action taken
+                            }
+                            healthComponent->health += 10;
+                            if (healthComponent->health > 100)
+                            {
+                                healthComponent->health = 100; // Cap the health
+                            }
+                            std::cout << "Player health increased to: " << healthComponent->health << "\n";
+                            entity->hidden = true; // Or remove from the world
                         }
-                        healthComponent->health += 10;
-                        if (healthComponent->health > 100)
+                        else if (name == "key")
                         {
-                            healthComponent->health = 100; // Cap the health
+                            inventoryComponent = player->getComponent<KeyComponent>();
+                            if (inventoryComponent == nullptr)
+                            {
+                                std::cerr << "Inventory component not found on player entity.\n";
+                                return 0; // No inventory component, no action taken
+                            }
+                            inventoryComponent->keysCollected += 1;
+                            std::cerr << "playerer has keys now  ." << inventoryComponent->keysCollected << "\n";
+                            entity->hidden = true; // Or remove from the world
                         }
-                        std::cout << "Player health increased to: " << healthComponent->health << "\n";
-                        entity->hidden = true; // Or remove from the world
-                    }
-                    else if (name == "key")
-                    {
-                        inventoryComponent = player->getComponent<KeyComponent>();
-                        if (inventoryComponent == nullptr)
+                        else if (name == "door" )
                         {
-                            std::cerr << "Inventory component not found on player entity.\n";
-                            return 0; // No inventory component, no action taken
-                        }
-                        inventoryComponent->keysCollected += 1;
-                        std::cerr << "playerer has keys now  ." << inventoryComponent->keysCollected << "\n";
-                        entity->hidden = true; // Or remove from the world
-                    }
-                    else if (name == "door" && player->getComponent<KeyComponent>()->keysCollected == 1)
-                    {
-                        std::cout << "Door unlocked! You can exit the game.\n";
-                        return 1; // Game won: All keys collected and door is unlocked
-                    }
-                    else if (name == "enemy")
-                    {
-                        HealthComponent *healthComponent = player->getComponent<HealthComponent>();
-                        healthComponent->health -= 25;
-                        if (healthComponent->health <= 0)
-                        {
-                            healthComponent->isAlive = false;
+                            if(player->getComponent<KeyComponent>()->keysCollected == 3){
+                            std::cout << "Door unlocked! You can exit the game.\n";
+                            return 1; // Game won: All keys collected and door is unlocked
+                            }
+                            else
                             return -1; // Player died
+
                         }
-                        std::cout << "Player health decreased to: " << healthComponent->health << "\n";
-                        entity->hidden = true; // Or remove from the world
+                        else if (name == "enemy")
+                        {
+                            HealthComponent *healthComponent = player->getComponent<HealthComponent>();
+                            healthComponent->health -= 50;
+                            if (healthComponent->health <= 0)
+                            {
+                                healthComponent->isAlive = false;
+                                return -1; // Player died
+                            }
+                            std::cout << "Player health decreased to: " << healthComponent->health << "\n";
+                            entity->hidden = true; // Or remove from the world
+                        }
                     }
                 }
             }

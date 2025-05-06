@@ -80,12 +80,12 @@ class Playstate : public our::State
         if (collisionResult == 1)
         {
             // Game won
-            getApp()->changeState("win");
+            getApp()->changeState("won");
         }
         else if (collisionResult == -1)
         {
             // Game lost
-            getApp()->changeState("lose");
+            getApp()->changeState("game-over");
         }
 
         renderer.render(&world);
