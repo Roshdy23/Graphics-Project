@@ -178,7 +178,7 @@ namespace our
                 {
                     if (light->lightType == 2)
                     {
-                        printf("light type 2\n");
+                        // printf("light type 2\n");
                         light->position = playerPosition;
                         light->position.y += 1.5;
                         if (playerPosition.x < -1)
